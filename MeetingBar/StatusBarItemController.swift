@@ -1002,7 +1002,8 @@ func createEventStatusString(title: String, startDate: Date, endDate: Date) -> (
     var eventTitle: String
     switch Defaults[.eventTitleFormat] {
     case .show:
-        if Defaults[.hideMeetingTitle] {
+        // Hide meeting title if either screen sharing is active or user has chosen to hide titles
+        if Defaults[.hideMeetingTitle] || ScreenSharing.isActive {
             eventTitle = "general_meeting".loco()
         } else {
             eventTitle = shortenTitle(title: title, offset: Defaults[.statusbarEventTitleLength])

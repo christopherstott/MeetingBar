@@ -12,6 +12,10 @@ import SwiftUI
 struct FullscreenNotification: View {
     var event: MBEvent
     var window: NSWindow?
+    
+    private var displayTitle: String {
+        ScreenSharing.isActive ? "Upcoming Meeting" : event.title
+    }
 
     var body: some View {
         ZStack {
@@ -23,15 +27,14 @@ struct FullscreenNotification: View {
                             .resizable()
                             .frame(width: 25, height: 25)
                     }
-                    Text(event.title).font(.title)
+                    Text(displayTitle).font(.title)
                 }
                 VStack(spacing: 10) {
                     Text(getEventDateString(event))
                 }.padding(15)
                 
-                // display location of the event, very useful if you
-                // have a lot of meetings in a building with a lot of meeting rooms
-                if let location = event.location {
+                // Hide location during screen sharing as it might contain sensitive info
+                if let location = event.location, !ScreenSharing.isActive {
                     VStack(spacing: 10) {
                         Text(location)
                     }.padding(15)
