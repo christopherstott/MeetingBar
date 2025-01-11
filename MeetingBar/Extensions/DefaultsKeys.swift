@@ -119,4 +119,6 @@ extension Defaults.Keys {
 
     static let customRegexes = Key<[String]>("customRegexes", default: [])
     static let filterEventRegexes = Key<[String]>("filterEventRegexes", default: [])
+
+    static let showFullscreenNotificationWithoutLink = Key<Bool>("showFullscreenNotificationWithoutLink", default: false)
 }

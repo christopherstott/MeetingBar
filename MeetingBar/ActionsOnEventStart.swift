@@ -50,7 +50,9 @@ class ActionsOnEventStart: NSObject {
         }
         //
 
-        if let nextEvent = getNextEvent(events: app.statusBarItem.events, linkRequired: true) {
+        // Only require links if the user hasn't enabled notifications for events without links   
+        let requireLink = !Defaults[.showFullscreenNotificationWithoutLink]
+        if let nextEvent = getNextEvent(events: app.statusBarItem.events, linkRequired: requireLink) {
             let now = Date()
 
             let startEndRange = nextEvent.startDate ... nextEvent.endDate
@@ -76,9 +78,7 @@ class ActionsOnEventStart: NSObject {
                 // we will remove the the current event from the scheduled events, so that we can run the script again ->
                 // this is an edge case when the event was already notified for, but scheduled for a later time.
                 if matchedEvent == nil || matchedEvent?.lastModifiedDate != nextEvent.lastModifiedDate {
-                    if nextEvent.meetingLink != nil {
-                        app.openFullscreenNotificationWindow(event: nextEvent)
-                    }
+                    app.openFullscreenNotificationWindow(event: nextEvent)
 
                     // update the executed events
                     if matchedEvent != nil {

@@ -18,8 +18,11 @@ struct FullscreenNotification: View {
             Rectangle.semiOpaqueWindow()
             VStack {
                 HStack {
-                    Image(nsImage: getIconForMeetingService(event.meetingLink?.service))
-                        .resizable().frame(width: 25, height: 25)
+                    if let meetingLink = event.meetingLink {
+                        Image(nsImage: getIconForMeetingService(meetingLink.service))
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                    }
                     Text(event.title).font(.title)
                 }
                 VStack(spacing: 10) {
@@ -38,9 +41,15 @@ struct FullscreenNotification: View {
                     Button(action: dismiss) {
                         Text("general_close".loco()).padding(.vertical, 5).padding(.horizontal, 20)
                     }
-                    Button(action: joinEvent) {
-                        Text("notifications_meetingbar_join_event_action".loco()).padding(.vertical, 5).padding(.horizontal, 25)
-                    }.background(Color.accentColor).cornerRadius(5)
+                    if event.meetingLink != nil {
+                        Button(action: joinEvent) {
+                            Text("notifications_meetingbar_join_event_action".loco())
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 25)
+                        }
+                        .background(Color.accentColor)
+                        .cornerRadius(5)
+                    }
                 }
             }
         }
